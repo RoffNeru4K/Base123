@@ -16,11 +16,18 @@
             margin: 0;
             flex-direction: column;
         }
+
+        /* Red cursor for PC users */
+        .red-cursor {
+            cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAFCAYAAACJViUEAAAAOElEQVR42mJ89t5/MwMzJgYGBsYPSHAlMBRAAPhAAzDQKIFACIAADwDA0ogdCIwGIIAkRDAnAUzFKMpgACAgDhmUCA0GW6aQAAAABJRU5ErkJggg=='), auto;
+        }
+
         .title {
             font-size: 3em;
             margin-bottom: 20px;
             text-align: center;
         }
+
         .container {
             text-align: center;
             width: 300px;
@@ -28,9 +35,11 @@
             padding: 20px;
             border-radius: 10px;
         }
+
         .input-section {
             margin-bottom: 20px;
         }
+
         .input-section input {
             width: 100%;
             padding: 10px;
@@ -40,6 +49,7 @@
             background: #333;
             color: white;
         }
+
         .login-btn {
             width: 100%;
             padding: 10px;
@@ -52,19 +62,23 @@
             border-radius: 5px;
             transition: all 0.3s ease;
         }
+
         .login-btn:hover {
             background-color: red;
             color: black;
         }
+
         .game-container {
             margin-top: 20px;
         }
+
         .game-container .game {
             border: 1px solid red;
             margin: 10px 0;
             padding: 10px;
             border-radius: 5px;
         }
+
         .copy-btn {
             background-color: red;
             color: black;
@@ -73,12 +87,14 @@
             cursor: pointer;
             border-radius: 5px;
         }
+
         .hidden-password {
             width: 100px;
         }
     </style>
 </head>
 <body>
+
     <div class="title">Neru Data</div>
     <div class="container">
         <div id="login-section" class="input-section">
@@ -87,23 +103,12 @@
             <p id="error-message" style="color: red;"></p>
         </div>
         <div id="account-section" style="display:none;">
-            <div class="game-container">
-                <div class="game">
-                    <h3>Honkai Star Rail</h3>
-                    <p>Username: wqpqfwds@hotmail.com <button class="copy-btn" onclick="copyToClipboard('wqpqfwds@hotmail.com')">Copy</button></p>
-                    <p>Password: <span class="hidden-password">****</span> <button class="copy-btn" onclick="copyToClipboard('fICbeKSlVo$J1DU')">Copy</button></p>
-                </div>
-                <div class="game">
-                    <h3>Genshin Impact</h3>
-                    <p>Username: ik0547 <button class="copy-btn" onclick="copyToClipboard('ik0547')">Copy</button></p>
-                    <p>Password: <span class="hidden-password">****</span> <button class="copy-btn" onclick="copyToClipboard('Nera#Pukimak$$120Udin(nodebat)')">Copy</button></p>
-                </div>
-            </div>
+            <div class="game-container" id="game-container"></div>
         </div>
     </div>
 
     <script>
-        const correctUsername = 'RoffiNeru4k';
+        const correctUsername = 'RoffiNeru4K';
 
         function checkUsername() {
             const enteredUsername = document.getElementById('username').value;
@@ -115,6 +120,7 @@
                 loginSection.style.display = 'none';
                 accountSection.style.display = 'block';
                 errorMessage.textContent = '';
+                loadAccountData();
             } else {
                 errorMessage.textContent = 'Incorrect username!';
             }
@@ -128,6 +134,52 @@
             document.execCommand('copy');
             document.body.removeChild(tempInput);
             alert('Copied to clipboard: ' + text);
+        }
+
+        function truncateText(text) {
+            if (text.length > 5) {
+                return text.substring(0, 5) + '...';
+            }
+            return text;
+        }
+
+        // Fetch data from external source and display it
+        function loadAccountData() {
+            fetch('https://raw.githubusercontent.com/RoffNeru4K/Base123/main/data-base.json')
+                .then(response => response.json())
+                .then(data => {
+                    const gameContainer = document.getElementById('game-container');
+                    gameContainer.innerHTML = ''; // Clear existing content
+
+                    data.forEach(account => {
+                        const { game, username, password } = account;
+
+                        // Check if it's an email or username
+                        const isEmail = username.includes('@');
+                        const label = isEmail ? 'Email' : 'Username';
+
+                        // Truncate username or email if longer than 5 characters
+                        const truncatedUsername = truncateText(username);
+
+                        const gameDiv = document.createElement('div');
+                        gameDiv.classList.add('game');
+                        gameDiv.innerHTML = `
+                            <h3>${game}</h3>
+                            <p>${label}: ${truncatedUsername} <button class="copy-btn" onclick="copyToClipboard('${username}')">Copy</button></p>
+                            <p>Password: <span class="hidden-password">******</span> <button class="copy-btn" onclick="copyToClipboard('${password}')">Copy</button></p>
+                        `;
+
+                        gameContainer.appendChild(gameDiv);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching account data:', error);
+                });
+        }
+
+        // Detect if user is on a PC, then set cursor to red
+        if (!/Mobi|Android/i.test(navigator.userAgent)) {
+            document.body.classList.add('red-cursor');
         }
     </script>
 </body>

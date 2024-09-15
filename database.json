@@ -1,4 +1,12 @@
 [
-    {"Genshin Impact","ik0547","Nera#Pukimak$$120Udin(nodebat)"},
-    {"Honkai: StarRail","wqpqfwds@hotmail.com","fICbeKSlVo$J1DU"}
+    {
+        "game": "Genshin Impact",
+        "username": "ik0547",
+        "password": "Nera#Pukimak$$120Udin(nodebat)"
+    },
+    {
+        "game": "Honkai: StarRail",
+        "username": "wqpqfwds@hotmail.com",
+        "password": "fICbeKSlVo$J1DU"
+    }
 ]

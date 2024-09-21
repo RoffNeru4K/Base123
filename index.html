@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,7 +18,6 @@
             flex-direction: column;
         }
 
-        /* Red cursor for PC users */
         .red-cursor {
             cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAFCAYAAACJViUEAAAAOElEQVR42mJ89t5/MwMzJgYGBsYPSHAlMBRAAPhAAzDQKIFACIAADwDA0ogdCIwGIIAkRDAnAUzFKMpgACAgDhmUCA0GW6aQAAAABJRU5ErkJggg=='), auto;
         }
@@ -93,8 +93,8 @@
         }
     </style>
 </head>
-<body>
 
+<body>
     <div class="title">Neru Data</div>
     <div class="container">
         <div id="login-section" class="input-section">
@@ -108,22 +108,33 @@
     </div>
 
     <script>
-        const correctUsername = 'RoffiNeru4K';
-
         function checkUsername() {
             const enteredUsername = document.getElementById('username').value;
             const errorMessage = document.getElementById('error-message');
             const loginSection = document.getElementById('login-section');
             const accountSection = document.getElementById('account-section');
 
-            if (enteredUsername === correctUsername) {
-                loginSection.style.display = 'none';
-                accountSection.style.display = 'block';
-                errorMessage.textContent = '';
-                loadAccountData();
-            } else {
-                errorMessage.textContent = 'Incorrect username!';
-            }
+            const jsonUrl = `https://raw.githubusercontent.com/RoffNeru4K/Base123/main/${enteredUsername}.json`;
+
+            // Coba fetch data JSON berdasarkan username
+            fetch(jsonUrl)
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Username tidak ditemukan!');
+                    }
+                })
+                .then(data => {
+                    loginSection.style.display = 'none';
+                    accountSection.style.display = 'block';
+                    errorMessage.textContent = '';
+                    loadAccountData(data);
+                })
+                .catch(error => {
+                    errorMessage.textContent = 'Username tidak terdaftar!';
+                    console.error('Error:', error);
+                });
         }
 
         function copyToClipboard(text) {
@@ -143,44 +154,36 @@
             return text;
         }
 
-        // Fetch data from external source and display it
-        function loadAccountData() {
-            fetch('https://raw.githubusercontent.com/RoffNeru4K/Base123/main/data-base.json')
-                .then(response => response.json())
-                .then(data => {
-                    const gameContainer = document.getElementById('game-container');
-                    gameContainer.innerHTML = ''; // Clear existing content
+        // Memuat data akun dari JSON
+        function loadAccountData(data) {
+            const gameContainer = document.getElementById('game-container');
+            gameContainer.innerHTML = ''; // Clear existing content
 
-                    data.forEach(account => {
-                        const { game, username, password } = account;
+            data.forEach(account => {
+                const { game, username, password } = account;
 
-                        // Check if it's an email or username
-                        const isEmail = username.includes('@');
-                        const label = isEmail ? 'Email' : 'Username';
+                const isEmail = username.includes('@');
+                const label = isEmail ? 'Email' : 'Username';
 
-                        // Truncate username or email if longer than 5 characters
-                        const truncatedUsername = truncateText(username);
+                const truncatedUsername = truncateText(username);
 
-                        const gameDiv = document.createElement('div');
-                        gameDiv.classList.add('game');
-                        gameDiv.innerHTML = `
-                            <h3>${game}</h3>
-                            <p>${label}: ${truncatedUsername} <button class="copy-btn" onclick="copyToClipboard('${username}')">Copy</button></p>
-                            <p>Password: <span class="hidden-password">******</span> <button class="copy-btn" onclick="copyToClipboard('${password}')">Copy</button></p>
-                        `;
+                const gameDiv = document.createElement('div');
+                gameDiv.classList.add('game');
+                gameDiv.innerHTML = `
+                    <h3>${game}</h3>
+                    <p>${label}: ${truncatedUsername} <button class="copy-btn" onclick="copyToClipboard('${username}')">Copy</button></p>
+                    <p>Password: <span class="hidden-password">******</span> <button class="copy-btn" onclick="copyToClipboard('${password}')">Copy</button></p>
+                `;
 
-                        gameContainer.appendChild(gameDiv);
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching account data:', error);
-                });
+                gameContainer.appendChild(gameDiv);
+            });
         }
 
-        // Detect if user is on a PC, then set cursor to red
+        // Set cursor merah jika di PC
         if (!/Mobi|Android/i.test(navigator.userAgent)) {
             document.body.classList.add('red-cursor');
         }
     </script>
 </body>
+
 </html>

@@ -18,22 +18,13 @@
             flex-direction: column;
         }
 
-        .red-cursor {
-            cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAFCAYAAACJViUEAAAAOElEQVR42mJ89t5/MwMzJgYGBsYPSHAlMBRAAPhAAzDQKIFACIAADwDA0ogdCIwGIIAkRDAnAUzFKMpgACAgDhmUCA0GW6aQAAAABJRU5ErkJggg=='), auto;
-        }
-
-        .title {
-            font-size: 3em;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
         .container {
             text-align: center;
             width: 300px;
             border: 2px solid red;
             padding: 20px;
             border-radius: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
         }
 
         .input-section {
@@ -48,6 +39,10 @@
             outline: none;
             background: #333;
             color: white;
+        }
+
+        .input-section input[type="password"] {
+            -webkit-text-security: disc;
         }
 
         .login-btn {
@@ -91,14 +86,50 @@
         .hidden-password {
             width: 100px;
         }
+
+        .star-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            color: red;
+        }
+
+        .popup {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 10px;
+            background: white;
+            border: 1px solid #000;
+            padding: 10px;
+            z-index: 100;
+        }
+
+        .popup input[type="color"] {
+            width: 100%;
+        }
+
+        .popup button {
+            margin-top: 10px;
+            width: 100%;
+            cursor: pointer;
+            padding: 5px;
+            background-color: red;
+            color: white;
+            border: none;
+        }
+
     </style>
 </head>
 
 <body>
+
     <div class="title">Neru Data</div>
-    <div class="container">
+    <div class="container" id="container">
         <div id="login-section" class="input-section">
-            <input type="text" id="username" placeholder="Enter username" />
+            <input type="password" id="username" placeholder="Enter username" />
             <button class="login-btn" onclick="checkUsername()">Login</button>
             <p id="error-message" style="color: red;"></p>
         </div>
@@ -107,7 +138,41 @@
         </div>
     </div>
 
+    <div class="star-icon" onclick="togglePopup()">★</div>
+
+    <div class="popup" id="color-popup">
+        <label for="color-input">Choose Container Color:</label>
+        <input type="color" id="color-input">
+        <button onclick="saveColor()">Save</button>
+    </div>
+
     <script>
+        // Simpan background URL jika tersedia, jika tidak default hitam
+        const backgroundUrl = ''; // masukkan URL background di sini jika ada
+        if (backgroundUrl) {
+            document.body.style.backgroundImage = `url(${backgroundUrl})`;
+            document.body.style.backgroundSize = 'cover';
+        }
+
+        let colorTimeout;
+        const container = document.getElementById('container');
+
+        // Ubah warna kontainer dan kembali ke merah setelah 30 menit
+        function saveColor() {
+            const newColor = document.getElementById('color-input').value;
+            container.style.borderColor = newColor;
+            clearTimeout(colorTimeout);
+            colorTimeout = setTimeout(() => {
+                container.style.borderColor = 'red';
+            }, 1800000); // 30 menit dalam milidetik
+            togglePopup();
+        }
+
+        function togglePopup() {
+            const popup = document.getElementById('color-popup');
+            popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
+        }
+
         function checkUsername() {
             const enteredUsername = document.getElementById('username').value;
             const errorMessage = document.getElementById('error-message');
@@ -116,7 +181,6 @@
 
             const jsonUrl = `https://raw.githubusercontent.com/RoffNeru4K/Base123/main/${enteredUsername}.json`;
 
-            // Coba fetch data JSON berdasarkan username
             fetch(jsonUrl)
                 .then(response => {
                     if (response.ok) {
@@ -137,35 +201,15 @@
                 });
         }
 
-        function copyToClipboard(text) {
-            const tempInput = document.createElement('input');
-            tempInput.value = text;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempInput);
-            alert('Copied to clipboard: ' + text);
-        }
-
-        function truncateText(text) {
-            if (text.length > 5) {
-                return text.substring(0, 5) + '...';
-            }
-            return text;
-        }
-
-        // Memuat data akun dari JSON
         function loadAccountData(data) {
             const gameContainer = document.getElementById('game-container');
-            gameContainer.innerHTML = ''; // Clear existing content
+            gameContainer.innerHTML = ''; 
 
             data.forEach(account => {
                 const { game, username, password } = account;
-
                 const isEmail = username.includes('@');
                 const label = isEmail ? 'Email' : 'Username';
-
-                const truncatedUsername = truncateText(username);
+                const truncatedUsername = username.replace(/./g, '*'); // Ubah ke *
 
                 const gameDiv = document.createElement('div');
                 gameDiv.classList.add('game');
@@ -179,11 +223,26 @@
             });
         }
 
-        // Set cursor merah jika di PC
-        if (!/Mobi|Android/i.test(navigator.userAgent)) {
-            document.body.classList.add('red-cursor');
+        function copyToClipboard(text) {
+            const tempInput = document.createElement('input');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            alert('Copied to clipboard: ' + text);
         }
+
+        document.getElementById('username').addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                checkUsername();
+            }
+        });
+
+        // Cegah cache username
+        document.getElementById('username').value = '';
     </script>
+
 </body>
 
 </html>

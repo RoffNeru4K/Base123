@@ -6,25 +6,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Neru Data</title>
     <style>
+        /* Atur background untuk PC (16:9) dan handphone (9:16) */
         body {
-            background-color: black;
-            color: red;
             font-family: 'Courier New', Courier, monospace;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            background-color: black;
+            background-image: url('https://wallpapers-clan.com/wp-content/uploads/2024/06/genshin-impact-arlecchino-dynamic-desktop-wallpaper-preview.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: red;
             flex-direction: column;
+        }
+
+        /* Atur background untuk handphone (9:16) */
+        @media (max-width: 768px) {
+            body {
+                background-image: url('https://get.wallhere.com/photo/Jason-Liang-drawing-Arlecchino-Genshin-Impact-the-gap-weapon-red-2308180.jpg');
+                background-size: cover;
+                background-position: center;
+            }
+        }
+
+        .title {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
         }
 
         .container {
             text-align: center;
             width: 300px;
-            border: 2px solid red;
             padding: 20px;
             border-radius: 10px;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.7); /* Transparan */
+            border: 2px solid red;
         }
 
         .input-section {
@@ -37,12 +57,8 @@
             margin-bottom: 10px;
             border: none;
             outline: none;
-            background: #333;
+            background: rgba(51, 51, 51, 0.7); /* Transparan */
             color: white;
-        }
-
-        .input-section input[type="password"] {
-            -webkit-text-security: disc;
         }
 
         .login-btn {
@@ -50,7 +66,7 @@
             padding: 10px;
             color: red;
             border: 2px solid red;
-            background-color: transparent;
+            background-color: rgba(0, 0, 0, 0.3); /* Transparan */
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
@@ -59,7 +75,7 @@
         }
 
         .login-btn:hover {
-            background-color: red;
+            background-color: rgba(255, 0, 0, 0.5);
             color: black;
         }
 
@@ -72,19 +88,16 @@
             margin: 10px 0;
             padding: 10px;
             border-radius: 5px;
+            background-color: rgba(0, 0, 0, 0.5); /* Transparan */
         }
 
         .copy-btn {
-            background-color: red;
+            background-color: rgba(255, 0, 0, 0.3); /* Transparan */
             color: black;
             border: none;
             padding: 5px;
             cursor: pointer;
             border-radius: 5px;
-        }
-
-        .hidden-password {
-            width: 100px;
         }
 
         .star-icon {
@@ -101,7 +114,7 @@
             position: absolute;
             top: 50px;
             right: 10px;
-            background: white;
+            background: rgba(255, 255, 255, 0.8); /* Transparan */
             border: 1px solid #000;
             padding: 10px;
             z-index: 100;
@@ -157,15 +170,24 @@
         let colorTimeout;
         const container = document.getElementById('container');
 
-        // Ubah warna kontainer dan kembali ke merah setelah 30 menit
+        // Ubah warna kontainer dan elemen sesuai JSON dan kembali ke merah setelah 30 menit
         function saveColor() {
             const newColor = document.getElementById('color-input').value;
-            container.style.borderColor = newColor;
+            setColor(newColor);
             clearTimeout(colorTimeout);
             colorTimeout = setTimeout(() => {
-                container.style.borderColor = 'red';
+                setColor('red');
             }, 1800000); // 30 menit dalam milidetik
             togglePopup();
+        }
+
+        function setColor(color) {
+            container.style.borderColor = color;
+            document.querySelectorAll('.login-btn, .copy-btn, .game').forEach((element) => {
+                element.style.borderColor = color;
+                element.style.color = color;
+            });
+            document.querySelector('.star-icon').style.color = color;
         }
 
         function togglePopup() {
@@ -209,13 +231,13 @@
                 const { game, username, password } = account;
                 const isEmail = username.includes('@');
                 const label = isEmail ? 'Email' : 'Username';
-                const truncatedUsername = username.replace(/./g, '*'); // Ubah ke *
+                const displayUsername = username.length > 4 ? username.slice(0, 4) + '...' : username;
 
                 const gameDiv = document.createElement('div');
                 gameDiv.classList.add('game');
                 gameDiv.innerHTML = `
                     <h3>${game}</h3>
-                    <p>${label}: ${truncatedUsername} <button class="copy-btn" onclick="copyToClipboard('${username}')">Copy</button></p>
+                    <p>${label}: ${displayUsername} <button class="copy-btn" onclick="copyToClipboard('${username}')">Copy</button></p>
                     <p>Password: <span class="hidden-password">******</span> <button class="copy-btn" onclick="copyToClipboard('${password}')">Copy</button></p>
                 `;
 
@@ -241,6 +263,7 @@
 
         // Cegah cache username
         document.getElementById('username').value = '';
+
     </script>
 
 </body>

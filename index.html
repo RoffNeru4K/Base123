@@ -1,6 +1,5 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -133,7 +132,6 @@
             color: white;
             border: none;
         }
-
     </style>
 </head>
 
@@ -160,13 +158,6 @@
     </div>
 
     <script>
-        // Simpan background URL jika tersedia, jika tidak default hitam
-        const backgroundUrl = ''; // masukkan URL background di sini jika ada
-        if (backgroundUrl) {
-            document.body.style.backgroundImage = `url(${backgroundUrl})`;
-            document.body.style.backgroundSize = 'cover';
-        }
-
         let colorTimeout;
         const container = document.getElementById('container');
 
@@ -201,31 +192,44 @@
             const loginSection = document.getElementById('login-section');
             const accountSection = document.getElementById('account-section');
 
-            const jsonUrl = `https://raw.githubusercontent.com/RoffNeru4K/Base123/main/${enteredUsername}.json`;
-
-            fetch(jsonUrl)
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        throw new Error('Username tidak ditemukan!');
+            if (enteredUsername === 'Elleony') {
+                const accountData = [
+                    {
+                        game: 'Genshin Impact',
+                        username: 'Xa7XcBmf',
+                        password: 'fICbeKSlVo$J1DU'
                     }
-                })
-                .then(data => {
-                    loginSection.style.display = 'none';
-                    accountSection.style.display = 'block';
-                    errorMessage.textContent = '';
-                    loadAccountData(data);
-                })
-                .catch(error => {
-                    errorMessage.textContent = 'Username tidak terdaftar!';
-                    console.error('Error:', error);
-                });
+                ];
+                loginSection.style.display = 'none';
+                accountSection.style.display = 'block';
+                errorMessage.textContent = '';
+                loadAccountData(accountData);
+            } else {
+                const jsonUrl = `https://raw.githubusercontent.com/RoffNeru4K/Base123/main/${enteredUsername}.json`;
+                fetch(jsonUrl)
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            throw new Error('Username tidak ditemukan!');
+                        }
+                    })
+                    .then(data => {
+                        loginSection.style.display = 'none';
+                        accountSection.style.display = 'block';
+                        errorMessage.textContent = '';
+                        loadAccountData(data);
+                    })
+                    .catch(error => {
+                        errorMessage.textContent = 'Username tidak terdaftar!';
+                        console.error('Error:', error);
+                    });
+            }
         }
 
         function loadAccountData(data) {
             const gameContainer = document.getElementById('game-container');
-            gameContainer.innerHTML = ''; 
+            gameContainer.innerHTML = '';
 
             data.forEach(account => {
                 const { game, username, password } = account;

@@ -1,20 +1,19 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Neru Data</title>
     <style>
-        /* Atur background untuk PC (16:9) dan handphone (9:16) */
         body {
             font-family: 'Courier New', Courier, monospace;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
             background-color: black;
-            background-image: url('https://wallpapers-clan.com/wp-content/uploads/2024/06/genshin-impact-arlecchino-dynamic-desktop-wallpaper-preview.jpg');
+            background-image: url('https://cdn.donmai.us/original/cd/89/__arlecchino_clorinde_wriothesley_and_kinich_genshin_impact_drawn_by_hitokoto__cd8972ecb634ca854312525d0c26a35c.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -22,28 +21,22 @@
             flex-direction: column;
         }
 
-        /* Atur background untuk handphone (9:16) */
-        @media (max-width: 768px) {
-            body {
-                background-image: url('https://get.wallhere.com/photo/Jason-Liang-drawing-Arlecchino-Genshin-Impact-the-gap-weapon-red-2308180.jpg');
-                background-size: cover;
-                background-position: center;
-            }
-        }
-
         .title {
-            font-size: 48px;
+            font-size: 36px;
             font-weight: bold;
             margin-bottom: 20px;
+            text-align: center;
         }
 
         .container {
             text-align: center;
-            width: 300px;
+            width: 90%;
+            max-width: 400px;
             padding: 20px;
             border-radius: 10px;
-            background-color: rgba(0, 0, 0, 0.7); /* Transparan */
+            background-color: rgba(0, 0, 0, 0.7);
             border: 2px solid red;
+            box-sizing: border-box;
         }
 
         .input-section {
@@ -56,8 +49,10 @@
             margin-bottom: 10px;
             border: none;
             outline: none;
-            background: rgba(51, 51, 51, 0.7); /* Transparan */
+            background: rgba(51, 51, 51, 0.7);
             color: white;
+            font-size: 14px;
+            box-sizing: border-box;
         }
 
         .login-btn {
@@ -65,7 +60,7 @@
             padding: 10px;
             color: red;
             border: 2px solid red;
-            background-color: rgba(0, 0, 0, 0.3); /* Transparan */
+            background-color: rgba(0, 0, 0, 0.3);
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
@@ -78,59 +73,27 @@
             color: black;
         }
 
-        .game-container {
+        .game-container, .website-container {
             margin-top: 20px;
         }
 
-        .game-container .game {
+        .game {
             border: 1px solid red;
             margin: 10px 0;
             padding: 10px;
             border-radius: 5px;
-            background-color: rgba(0, 0, 0, 0.5); /* Transparan */
+            background-color: rgba(0, 0, 0, 0.5);
+            font-size: 14px;
         }
 
         .copy-btn {
-            background-color: rgba(255, 0, 0, 0.3); /* Transparan */
+            background-color: rgba(255, 0, 0, 0.3);
             color: black;
             border: none;
             padding: 5px;
             cursor: pointer;
             border-radius: 5px;
-        }
-
-        .star-icon {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 20px;
-            cursor: pointer;
-            color: red;
-        }
-
-        .popup {
-            display: none;
-            position: absolute;
-            top: 50px;
-            right: 10px;
-            background: rgba(255, 255, 255, 0.8); /* Transparan */
-            border: 1px solid #000;
-            padding: 10px;
-            z-index: 100;
-        }
-
-        .popup input[type="color"] {
-            width: 100%;
-        }
-
-        .popup button {
-            margin-top: 10px;
-            width: 100%;
-            cursor: pointer;
-            padding: 5px;
-            background-color: red;
-            color: white;
-            border: none;
+            font-size: 12px;
         }
     </style>
 </head>
@@ -145,108 +108,98 @@
             <p id="error-message" style="color: red;"></p>
         </div>
         <div id="account-section" style="display:none;">
-            <div class="game-container" id="game-container"></div>
+            <div id="game-container" class="game-container"></div>
+            <div id="website-container" class="website-container"></div>
         </div>
     </div>
 
-    <div class="star-icon" onclick="togglePopup()">★</div>
-
-    <div class="popup" id="color-popup">
-        <label for="color-input">Choose Container Color:</label>
-        <input type="color" id="color-input">
-        <button onclick="saveColor()">Save</button>
-    </div>
-
     <script>
-        let colorTimeout;
-        const container = document.getElementById('container');
-
-        // Ubah warna kontainer dan elemen sesuai JSON dan kembali ke merah setelah 30 menit
-        function saveColor() {
-            const newColor = document.getElementById('color-input').value;
-            setColor(newColor);
-            clearTimeout(colorTimeout);
-            colorTimeout = setTimeout(() => {
-                setColor('red');
-            }, 1800000); // 30 menit dalam milidetik
-            togglePopup();
-        }
-
-        function setColor(color) {
-            container.style.borderColor = color;
-            document.querySelectorAll('.login-btn, .copy-btn, .game').forEach((element) => {
-                element.style.borderColor = color;
-                element.style.color = color;
-            });
-            document.querySelector('.star-icon').style.color = color;
-        }
-
-        function togglePopup() {
-            const popup = document.getElementById('color-popup');
-            popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
-        }
-
         function checkUsername() {
             const enteredUsername = document.getElementById('username').value;
             const errorMessage = document.getElementById('error-message');
             const loginSection = document.getElementById('login-section');
             const accountSection = document.getElementById('account-section');
 
-            if (enteredUsername === 'Elleony') {
-                const accountData = [
-                    {
-                        game: 'Genshin Impact',
-                        username: 'Xa7XcBmf',
-                        password: 'fICbeKSlVo$J1DU'
+            const jsonUrl = `https://raw.githubusercontent.com/RoffNeru4K/Base123/main/Base/${enteredUsername}.json`;
+
+            fetch(jsonUrl)
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Username tidak ditemukan!');
                     }
-                ];
-                loginSection.style.display = 'none';
-                accountSection.style.display = 'block';
-                errorMessage.textContent = '';
-                loadAccountData(accountData);
-            } else {
-                const jsonUrl = `https://raw.githubusercontent.com/RoffNeru4K/Base123/main/${enteredUsername}.json`;
-                fetch(jsonUrl)
-                    .then(response => {
-                        if (response.ok) {
-                            return response.json();
-                        } else {
-                            throw new Error('Username tidak ditemukan!');
-                        }
-                    })
-                    .then(data => {
-                        loginSection.style.display = 'none';
-                        accountSection.style.display = 'block';
-                        errorMessage.textContent = '';
-                        loadAccountData(data);
-                    })
-                    .catch(error => {
-                        errorMessage.textContent = 'Username tidak terdaftar!';
-                        console.error('Error:', error);
-                    });
-            }
+                })
+                .then(data => {
+                    loginSection.style.display = 'none';
+                    accountSection.style.display = 'block';
+                    errorMessage.textContent = '';
+                    loadAccountData(data);
+                })
+                .catch(error => {
+                    errorMessage.textContent = 'Username tidak terdaftar!';
+                    console.error('Error:', error);
+                });
         }
 
         function loadAccountData(data) {
             const gameContainer = document.getElementById('game-container');
+            const websiteContainer = document.getElementById('website-container');
+
             gameContainer.innerHTML = '';
+            websiteContainer.innerHTML = '';
 
-            data.forEach(account => {
-                const { game, username, password } = account;
-                const isEmail = username.includes('@');
-                const label = isEmail ? 'Email' : 'Username';
-                const displayUsername = username.length > 4 ? username.slice(0, 4) + '...' : username;
+            let hasGames = false;
+            let hasWebsites = false;
 
-                const gameDiv = document.createElement('div');
-                gameDiv.classList.add('game');
-                gameDiv.innerHTML = `
-                    <h3>${game}</h3>
-                    <p>${label}: ${displayUsername} <button class="copy-btn" onclick="copyToClipboard('${username}')">Copy</button></p>
-                    <p>Password: <span class="hidden-password">******</span> <button class="copy-btn" onclick="copyToClipboard('${password}')">Copy</button></p>
-                `;
+            // Tampilkan Game Account jika ada
+            if (data.gameAccounts && data.gameAccounts.length > 0) {
+                hasGames = true;
+                const gameHeader = document.createElement('h3');
+                gameHeader.textContent = 'Game Account';
+                gameContainer.appendChild(gameHeader);
 
-                gameContainer.appendChild(gameDiv);
-            });
+                data.gameAccounts.forEach(account => {
+                    const { game, username, password } = account;
+                    const isEmail = username.includes('@');
+                    const label = isEmail ? 'Email' : 'Username';
+                    const displayUsername = username.length > 4 ? username.slice(0, 4) + '...' : username;
+
+                    const gameDiv = document.createElement('div');
+                    gameDiv.classList.add('game');
+                    gameDiv.innerHTML = `
+                        <h3>${game}</h3>
+                        <p>${label}: ${displayUsername} <button class="copy-btn" onclick="copyToClipboard('${username}')">Copy</button></p>
+                        <p>Password: <span class="hidden-password">******</span> <button class="copy-btn" onclick="copyToClipboard('${password}')">Copy</button></p>
+                    `;
+                    gameContainer.appendChild(gameDiv);
+                });
+            }
+
+            // Tampilkan Website Favorit jika ada
+            if (data.favoriteWebsites && data.favoriteWebsites.length > 0) {
+                hasWebsites = true;
+                const websiteHeader = document.createElement('h3');
+                websiteHeader.textContent = 'Website Favorit';
+                websiteContainer.appendChild(websiteHeader);
+
+                data.favoriteWebsites.forEach(({ website, url }) => {
+                    const truncatedWebsite = website.length > 15 ? website.slice(0, 15) + '...' : website;
+                    const websiteDiv = document.createElement('div');
+                    websiteDiv.classList.add('game');
+                    websiteDiv.innerHTML = `
+                        <p>${truncatedWebsite} <button class="copy-btn" onclick="openUrl('${url}')">Open</button></p>
+                    `;
+                    websiteContainer.appendChild(websiteDiv);
+                });
+            }
+
+            // Tampilkan "Undefined" jika tidak ada Game Account atau Website Favorit
+            if (!hasGames && !hasWebsites) {
+                const undefinedHeader = document.createElement('h3');
+                undefinedHeader.textContent = 'Undefined';
+                gameContainer.appendChild(undefinedHeader);
+            }
         }
 
         function copyToClipboard(text) {
@@ -256,7 +209,10 @@
             tempInput.select();
             document.execCommand('copy');
             document.body.removeChild(tempInput);
-            alert('Copied to clipboard: ' + text);
+        }
+
+        function openUrl(url) {
+            window.open(url, '_blank');
         }
 
         document.getElementById('username').addEventListener('keydown', function (event) {
@@ -264,12 +220,7 @@
                 checkUsername();
             }
         });
-
-        // Cegah cache username
-        document.getElementById('username').value = '';
-
     </script>
 
 </body>
-
 </html>

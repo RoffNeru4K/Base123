@@ -1,4 +1,5 @@
-[
+{
+    "gameAccounts": [
     {
         "game": "Genshin Impact",
         "username": "ik0547",
@@ -20,3 +21,4 @@
         "password": "@kunsroffi#18"
     }
 ]
+}

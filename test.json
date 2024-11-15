@@ -1,7 +1,24 @@
-[
-    {
-        "game": "Genshin Impact",
-        "username": "Hoyoverse",
-        "password": "testing"
-    }
-]
+{
+    "gameAccounts": [
+        {
+            "game": "Genshin Impact",
+            "username": "miwa123",
+            "password": "password123"
+        },
+        {
+            "game": "Mobile Legends",
+            "username": "ml_player456",
+            "password": "mlpass456"
+        }
+    ],
+    "favoriteWebsites": [
+        {
+            "website": "Google",
+            "url": "https://www.google.com"
+        },
+        {
+            "website": "YouTube",
+            "url": "https://www.youtube.com"
+        }
+    ]
+}

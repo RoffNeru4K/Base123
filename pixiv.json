@@ -1,18 +1,14 @@
 [
     {
-        "website": "Danbooru Sensitive Page",
-        "url": "https://danbooru.donmai.us"
+        "website": "Google",
+        "url": "https://www.google.com"
     },
     {
-        "website": "Pixiv Illustrations",
-        "url": "https://www.pixiv.net"
+        "website": "YouTube",
+        "url": "https://www.youtube.com"
     },
     {
-        "website": "ArtStation Portfolio",
-        "url": "https://www.artstation.com"
-    },
-    {
-        "website": "DeviantArt Gallery",
-        "url": "https://www.deviantart.com"
+        "website": "Reddit",
+        "url": "https://www.reddit.com"
     }
 ]

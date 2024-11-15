@@ -20,5 +20,15 @@
             "username": "Sachrbx_6585",
             "password": "@kunsroffi#18"
         }
+    ],
+    "favoriteWebsites": [
+        {
+            "website": "Danbooru Sensitive",
+            "url": "https://danbooru.donmai.us/posts?tags=rating%3Asensitive+&z=5"
+        },
+        {
+            "website": "Danbooru General",
+            "url": "https://danbooru.donmai.us/posts?tags=rating%3Ageneral&z=5"
+        }
     ]
 }

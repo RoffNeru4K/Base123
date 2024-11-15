@@ -1,24 +1,24 @@
 {
     "gameAccounts": [
-    {
-        "game": "Genshin Impact",
-        "username": "ik0547",
-        "password": "Nera#Pukimak$$120Udin(nodebat)"
-    },
-    {
-        "game": "Honkai: StarRail",
-        "username": "wqpqfwds@hotmail.com",
-        "password": "fICbeKSlVo$J1DU"
-    },
-    {
-        "game": "Zenless Zone Zero",
-        "username": "km1jcsjcnla1@hotmail.com",
-        "password": "xxc1x5fj1m"
-    },
-    {
-        "game": "Roblox",
-        "username": "Sachrbx_6585",
-        "password": "@kunsroffi#18"
-    }
-]
+        {
+            "game": "Genshin Impact",
+            "username": "ik0547",
+            "password": "Nera#Pukimak$$120Udin(nodebat)"
+        },
+        {
+            "game": "Honkai: StarRail",
+            "username": "wqpqfwds@hotmail.com",
+            "password": "fICbeKSlVo$J1DU"
+        },
+        {
+            "game": "Zenless Zone Zero",
+            "username": "km1jcsjcnla1@hotmail.com",
+            "password": "xxc1x5fj1m"
+        },
+        {
+            "game": "Roblox",
+            "username": "Sachrbx_6585",
+            "password": "@kunsroffi#18"
+        }
+    ]
 }

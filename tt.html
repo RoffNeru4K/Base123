@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>TikTok Downloader Evelyn</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 600px;
+      margin: auto;
+      padding: 2em;
+      background: #111;
+      color: #fff;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 1em;
+      border-radius: 8px;
+    }
+    button {
+      background: crimson;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 20px;
+      background: #222;
+      padding: 15px;
+      border-radius: 8px;
+    }
+    img {
+      width: 100%;
+      border-radius: 10px;
+    }
+    a {
+      color: cyan;
+      text-decoration: none;
+    }
+    .cf-turnstile {
+      margin-top: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <h1>🎥 TikTok Video Downloader</h1>
+
+  <input id="url" placeholder="Tempelkan link video TikTok di sini..." />
+
+  <!-- Turnstile CAPTCHA -->
+  <div class="cf-turnstile"
+       data-sitekey="0x4AAAAAABiCXN6bjhqH8PdI"
+       data-callback="onTurnstileSuccess"
+       data-theme="dark">
+  </div>
+
+  <button id="downloadBtn" onclick="download()" disabled>⬇️ Download Video</button>
+
+  <div class="result" id="output" style="display: none;"></div>
+
+  <!-- Turnstile Script -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+  <script>
+    let turnstileToken = "";
+
+    function onTurnstileSuccess(token) {
+      turnstileToken = token;
+      document.getElementById("downloadBtn").disabled = false;
+    }
+
+    async function download() {
+      if (!turnstileToken) {
+        alert("Verifikasi CAPTCHA terlebih dahulu.");
+        return;
+      }
+
+      const url = document.getElementById("url").value.trim();
+      const output = document.getElementById("output");
+      output.style.display = "none";
+      output.innerHTML = "⏳ Memproses...";
+
+      const form = new URLSearchParams({ url, hd: "1" });
+
+      try {
+        const res = await fetch("https://tikwm.com/api/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+            "User-Agent": "Mozilla/5.0",
+            Referer: "https://tikwm.com/",
+          },
+          body: form
+        });
+
+        const data = await res.json();
+        if (!data || !data.data) throw new Error("Tidak ada data kembali.");
+
+        const video = data.data;
+        output.style.display = "block";
+        output.innerHTML = `
+          <h3>${video.title || "Tanpa Judul"}</h3>
+          <img src="${video.cover}" alt="Thumbnail" />
+          <p><strong>👤 @${video.author.nickname}</strong></p>
+          <p>⏱️ ${video.duration}s | ❤️ ${video.digg_count}</p>
+          <a href="${video.play}" download target="_blank">⬇️ Tanpa Watermark</a><br/>
+          <a href="${video.wmplay}" download target="_blank">⬇️ Dengan Watermark</a><br/>
+          <a href="${video.music}" download target="_blank">🎵 Audio</a>
+        `;
+      } catch (err) {
+        output.style.display = "block";
+        output.innerHTML = "❌ Gagal memproses: " + err.message;
+      }
+    }
+  </script>
+</body>
+</html>

@@ -97,3 +97,28 @@
     <a onclick="returnToHome()">Back to Home</a>
   </main>
   <footer>
+    <div>
+      <a href="#" onclick="alert('By using NeruTik, you agree to our Terms of Use')">Terms</a>
+      <a href="#" onclick="alert('We do not store any personal data')">Privacy</a>
+      <a href="https://wa.me/6285179993021" target="_blank">WhatsApp</a>
+    </div>
+    <p>© 2025 NeruTik. All rights reserved.</p>
+  </footer>
+  <script>
+    function returnToHome() {
+      const hostname = window.location.hostname;
+      const path = window.location.pathname;
+      let redirectPath = '/';
+
+      if (hostname.toLowerCase().includes('github')) {
+        const pathSegments = path.split('/').filter(segment => segment);
+        if (pathSegments.length > 0) {
+          redirectPath = `/${pathSegments[0]}/`;
+        }
+      }
+
+      window.location.href = redirectPath;
+    }
+  </script>
+</body>
+</html>
